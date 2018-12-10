@@ -1,0 +1,30 @@
+.de-box {
+    border: 1px solid #ccc;
+    width: 50%;
+    margin: 0 auto;
+    height: 200px;
+    margin-top: 50%;
+    padding: 20px;
+    padding-bottom: 40px;
+    border-radius: 5px;
+}
+
+.de-box .mdui-row {
+    margin: 20px 0;
+}
+
+@media (max-width: 768px) {
+    html{
+        font-size: 62.5%;
+    }
+    .mdui-toolbar a{
+        font-size: 1.4rem;
+    }
+    .mdui-toolbar a.welcome{
+        font-size: 1.6rem;
+    }
+    .de-box {
+        width: 80%;
+        margin-top: 15%;
+    }
+}

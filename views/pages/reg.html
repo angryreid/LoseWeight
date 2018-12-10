@@ -1,0 +1,62 @@
+<% include ../sharePages/header.html %>
+
+<link rel="stylesheet" href="/css/start.css">
+    <div class="mdui-container">
+        <div class="mdui-row">
+            <div class="de-box mdui-shadow-10">
+                <div class="mdui-textfield mdui-textfield-floating-label">
+                    <i class="mdui-icon material-icons">accessibility</i>
+                    <label class="mdui-textfield-label">Username</label>
+                    <input class="mdui-textfield-input" type="text" id="coolUser" />
+                </div>
+                <div class="mdui-textfield mdui-textfield-floating-label">
+                    <i class="mdui-icon material-icons">lock_outline</i>
+                    <label class="mdui-textfield-label">Password</label>
+                    <input class="mdui-textfield-input" type="password" id="coolPsw" />
+                </div>
+                <div class="mdui-row">
+                    <div class="mdui-row-xs-1">
+                        <div class="mdui-col">
+                            <button class="mdui-btn mdui-btn-block  mdui-color-pink-a200 mdui-ripple" onclick="submit()">Login UP</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function submit(){
+            var cooUser = document.getElementById("coolUser").value.trim();
+            var coolPsw = document.getElementById("coolPsw").value.trim();
+            if (cooUser != "" && coolPsw != "") {
+                loginCool(cooUser, coolPsw);
+            } else {
+                mdui.alert("请填写资料", "消息");
+            }
+        }
+
+        function loginCool(user,psw){
+            console.log(user);
+            console.log(psw);
+            $.ajax({
+                method: "post",
+                url: "/reg",
+                data: {
+                    user,
+                    psw
+                },
+                success: function (data) {
+                    console.log(data.result);
+                    if (data.result == 1) {
+                        mdui.alert("注册成功，即将跳往登陆", "消息");
+                        setTimeout(function(){
+                            window.location.href = "/cool/start";
+                        },1000);
+                    }else{
+                        mdui.alert("此用户已被注册", "消息");
+                    }
+                }
+            });
+        }
+    </script>
+<% include ../sharePages/footer.html %>

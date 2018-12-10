@@ -1,0 +1,99 @@
+<% include ../sharePages/header.html%>
+    <style>
+    h3 {
+        text-align: center;
+    }
+    </style>
+    <div class="mdui-table-fluid">
+    </div>
+    <h3>Aloha <span class="mdui-text-color-pink-accent"><%= user.name %></span><i class="mdui-text-color-pink-accent mdui-icon material-icons">sentiment_satisfied</i></h3>
+    <div id="main" style="height: 500px"></div>
+    <script>
+    (function() {
+        //加载数据
+        loadWeight();
+    })();
+
+
+    var xdata = [];
+    var ydata = [];
+
+    function loadWeight() {
+        var userId = "<%= user._id%>";
+        $.ajax({
+            method: "post",
+            url: "/loadWeight",
+            data: { userId },
+            success: function(data) {
+                if (data.result == 1) {
+                    var weightData = data.data;
+                    for (var i = 0; i < weightData.length; i++) {
+                        ydata[i] = Number(weightData[i].weight);
+                        xdata[i] = moment(weightData[i].createTime).format("YYYY-MM-DD");
+                    }
+                    drawData();
+                } else {
+                    mdui.alert("查询无数据", "消息");
+                }
+            },
+        });
+    }
+
+    function drawData() {
+        var dom = document.getElementById("main");
+        var myChart = echarts.init(dom);
+        var app = {};
+        option = null;
+        app.title = '折柱混合';
+
+        option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    crossStyle: {
+                        color: '#999'
+                    }
+                }
+            },
+            toolbox: {
+                feature: {
+                    magicType: { show: true, type: ['line', 'bar'] },
+                    restore: { show: true },
+                    saveAsImage: { show: true }
+                }
+            },
+            xAxis: [{
+                type: 'category',
+                data: xdata,
+                axisPointer: {
+                    type: 'shadow'
+                }
+            }],
+            yAxis: [{
+                type: 'value',
+                name: 'Weight',
+                min: 40,
+                max: 75,
+                interval: 5,
+                axisLabel: {
+                    formatter: '{value} kg'
+                }
+            }],
+            series: [{
+                    name: 'Weight(/kg)',
+                    type: 'bar',
+                    data: ydata,
+                    itemStyle: {
+                        color: "#ff4081"
+                    },
+                }
+
+            ]
+        };;
+        if (option && typeof option === "object") {
+            myChart.setOption(option, true);
+        }
+    }
+    </script>
+    <% include ../sharePages/footer.html%>
